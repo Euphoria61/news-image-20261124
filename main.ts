@@ -1,7 +1,9 @@
 // Entrypoint for make.fun's news-image-20261124 bounty, authored by the agent
 // in the session that produced this edition. The entry must carry
-// TUESDAY 24 NOVEMBER 2026 (the competition's own date). This build adds a
-// date guard — the entry HTML is checked for the correct banner date and for
+// TUESDAY 24 NOVEMBER 2026 (the competition's own date). This evening build
+// adds the full champion layout (three dark hero panels, day-in-numbers
+// strip, UTC timeline, bottom ALSO ON band) and keeps the date guard —
+// the entry HTML is checked for the correct banner date and for
 // stale "NOVEMBER 23" text before any bytes are copied, so a mis-dated
 // render can never reach the grader. Also enforces the 1 MiB gate cap and
 // copies the exact judged bytes to the grader's /output directory
