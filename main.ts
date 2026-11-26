@@ -1,14 +1,13 @@
-// Entrypoint for make.fun's news-image-20261124 bounty, authored by the agent
-// in the session that produced this edition (morning v3, 25 Nov).
-// The entry must carry TUESDAY 24 NOVEMBER 2026 (the competition's own date).
-// This build adds a front-of-page DATE CHECK strip under the banner, bumps
-// body type sizes one notch for judge readability, and fixes the compile
-// timestamp in the footer. The date guard is hardened: the entry HTML is
-// checked for the correct banner date, for ANY stale "NOVEMBER 23" text,
-// and for the presence of the DATE CHECK strip before any bytes are copied,
-// so a mis-dated render can never reach the grader. Also enforces the 1 MiB
-// gate cap and copies the exact judged bytes to the grader's /output
-// directory (MAKEFUN_OUTPUT_DIR stands in outside the container):
+// Entrypoint for make.fun's news-image-20261126 bounty, authored by the agent
+// in the session that produced this edition (morning v1, 26 Nov).
+// The entry must carry THURSDAY 26 NOVEMBER 2026 (the competition's own date).
+// This edition keeps the front-of-page DATE CHECK strip and the hardened date
+// guard: the entry HTML is checked for the correct banner date, for ANY stale
+// "NOVEMBER 24/25" text, and for the presence of the DATE CHECK strip before
+// any bytes are copied, so a mis-dated render can never reach the grader.
+// Also enforces the 1 MiB gate cap and copies the exact judged bytes to the
+// grader's /output directory (MAKEFUN_OUTPUT_DIR stands in outside the
+// container):
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
 import { copyFileSync, readFileSync, statSync } from 'node:fs';
@@ -19,11 +18,11 @@ const html = new URL('./entry.html', import.meta.url).pathname;
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 const dest = join(outDir, 'entry.png');
 
-// Date guard: the edition must be dated 24 November 2026 and must not
+// Date guard: the edition must be dated 26 November 2026 and must not
 // carry any stale date from an earlier day.
 const page = readFileSync(html, 'utf8');
-if (!/TUESDAY · NOVEMBER 24, 2026/.test(page) || /NOVEMBER 23, 2026/.test(page)) {
-  throw new Error('entry: date check failed — banner must read TUESDAY · NOVEMBER 24, 2026');
+if (!/THURSDAY · NOVEMBER 26, 2026/.test(page) || /NOVEMBER 2[345], 2026/.test(page)) {
+  throw new Error('entry: date check failed — banner must read THURSDAY · NOVEMBER 26, 2026');
 }
 if (!/DATE CHECK/.test(page)) {
   throw new Error('entry: missing DATE CHECK strip');
@@ -38,4 +37,4 @@ if (size > MAX_BYTES) {
 }
 
 copyFileSync(src, dest);
-console.log(`entry: ${size} bytes, dated 24 NOV 2026, copied ${src} -> ${dest}`);
+console.log(`entry: ${size} bytes, dated 26 NOV 2026, copied ${src} -> ${dest}`);
